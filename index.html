@@ -76,40 +76,48 @@ t396_init('763477454');
 <div class='t396__elem tn-elem tn-elem__7634774551696157393379' data-elem-id='1696157393379' data-elem-type='form' data-field-top-value="20" data-field-left-value="20" data-field-width-value="460" data-field-axisy-value="top" data-field-axisx-value="left" data-field-container-value="grid" data-field-topunits-value="px" data-field-leftunits-value="px" data-field-heightunits-value="" data-field-widthunits-value="px" data-field-top-res-320-value="2193" data-field-left-res-320-value="-16" data-field-width-res-320-value="352" data-field-inputpos-value="v" data-field-inputfontfamily-value="Georgia" data-field-fieldfontfamily-value="Georgia" data-field-inputfontsize-value="16" data-field-inputfontweight-value="300" data-field-inputcolor-value="#3b0000" data-field-inputbgcolor-value="#ffffff" data-field-inputbordercolor-value="#3b0000" data-field-inputbordersize-value="1" data-field-inputradius-value="15" data-field-inputheight-value="50" data-field-inputmargbottom-value="20" data-field-inputmargright-value="20" data-field-inputtitlefontsize-value="16" data-field-inputtitlefontweight-value="300" data-field-inputtitlecolor-value="#3b0000" data-field-inputtitlemargbottom-value="5" data-field-inputelscolor-value="#3b0000" data-field-inputelsfontweight-value="300" data-field-inputelsfontsize-value="16" data-field-buttontitle-value="Жіберу" data-field-buttonalign-value="center" data-field-buttoncolor-value="#fff" data-field-buttonbgcolor-value="#800000" data-field-buttonradius-value="20" data-field-buttonwidth-value="160" data-field-buttonheight-value="50" data-field-buttonfontfamily-value="Georgia" data-field-buttonfontsize-value="14" data-field-buttonfontweight-value="300" data-field-receivers-value="536efa845fd72a74e4b92babef2bcda5,f653eeed40220412268d08feb5225acc" data-field-inputfontsize-res-320-value="14" data-field-inputtitlefontsize-res-320-value="14" data-field-inputelsfontsize-res-320-value="14" 
 >
 
-
-	<form id="myForm">
-    <label for="name">Жұбыңызбен келетін болсаңыз, есімдеріңізді бірге жазуңызды өтінеміз:</label><br>
-	<input type="text" id="name" name="Name" placeholder="Есіміңіз" required><br><br>
+<form id="myForm">
+    <label for="name">Есіміңізді жазыңыз:</label><br>
+    <input type="text" id="name" name="Name" placeholder="Есіміңіз" required><br><br>
     
     <input type="radio" id="option1" name="Radio" value="Әрине, келемін" required>
     <label for="option1">Әрине, келемін</label><br>
     <input type="radio" id="option2" name="Radio" value="Өкінішке орай, келе алмаймын">
     <label for="option2">Өкінішке орай, келе алмаймын</label><br><br>
     
-    <div class="buttuon"><button type="submit">Жіберу</button></div>
-	
-  </form>
-  <div id="response"></div>
-	
-  <script>
+    <div class="buttuon"><button type="submit" id="submitBtn">Жіберу</button></div>
+</form>
+<div id="response"></div>
+
+<script>
     document.getElementById('myForm').addEventListener('submit', function(event) {
-      event.preventDefault();
-      var formData = new FormData(this);
-      fetch('https://script.google.com/macros/s/AKfycbwTyXPws4_ky2pOouZIjwdqKcwlDZR7ThnVocjK8qlNooWBxqw4cOl1EMHqj1RwkDuS/exec', {
-        method: 'POST',
-        body: formData
-      })
-      .then(response => response.json())
-      .then(data => {
-        console.log('Success:', data);
-        document.getElementById('response').innerHTML = '<p>' + data.message + '</p>';
-      })
-      .catch((error) => {
-        console.error('Error:', error);
-        document.getElementById('response').innerHTML = '<p>Произошла ошибка при отправке данных.</p>';
-      });
+        event.preventDefault();
+
+        // Заблокировать кнопку отправки, чтобы предотвратить множественные отправки
+        document.getElementById('submitBtn').setAttribute('disabled', 'true');
+
+        var formData = new FormData(this);
+        fetch('https://script.google.com/macros/s/AKfycbwTyXPws4_ky2pOouZIjwdqKcwlDZR7ThnVocjK8qlNooWBxqw4cOl1EMHqj1RwkDuS/exec', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Success:', data);
+            document.getElementById('response').innerHTML = '<p>' + data.message + '</p>';
+            alert('Ваши данные успешно отправлены!'); // Всплывающее окно с уведомлением
+            document.getElementById('name').value = ''; // Очистка поля с именем
+            document.getElementById('submitBtn').removeAttribute('disabled'); // Разблокировать кнопку после отправки
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+            document.getElementById('response').innerHTML = '<p>Произошла ошибка при отправке данных.</p>';
+            alert('Произошла ошибка при отправке данных.');
+            document.getElementById('submitBtn').removeAttribute('disabled'); // Разблокировать кнопку после ошибки
+        });
     });
-  </script>
+</script>
+
 
 
 
